@@ -1,10 +1,10 @@
 " Dan's .vimrc
-" this file lives in ~/dotfiles/.vimrc and is symlinked to ~/.vimrc
-" github https://github.com/dakoblas/dotfiles (private repo)
+" this file lives in ~/vimrc/.vimrc and is symlinked to ~/.vimrc
+" github https://github.com/dakoblas/vimrc
 
 " NOTES TO SELF/TO DO
 " {{{
-" change it so trailing whitespace is only stripped on certain filetypes liek
+" change it so trailing whitespace is only stripped on certain filetypes like
 " python, c, jave, etc
 "
 " }}}
