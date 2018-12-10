@@ -504,6 +504,6 @@ let g:ycm_seed_identifiers_with_syntax = 0
 
 " MERLIN CONFIG
 " {{{
-let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
-execute "set rtp+=" . g:opamshare . "/merlin/vim"
+"let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+"execute "set rtp+=" . g:opamshare . "/merlin/vim"
 " }}}
