@@ -28,6 +28,7 @@ set expandtab	    "tabs insert spaces not tabstops
 set autoread        "reread the file if it has changed outside of vim
 set foldnestmax=3   "only nest 3 levels of fold
 set foldlevel=0     "close folds by default
+"set foldlevelstart=0
 set foldcolumn=2    "gutter column shows folding heirarchy
 filetype on 	    "enable filetype detection. note: see :h ftplugin
 " }}}
@@ -360,37 +361,12 @@ endfunction
 
 " MODS/PLUGINS
 """"""""""""""""
-" VUNDLE CONFIG
+
+" VIM-PLUG CONFIG (https://github.com/junegunn/vim-plug)
 " {{{
-" self: I left a bunch of these comments from the doc config for reference.
-
-set shell=bash	"self: Vundle doesnt like fish, so use bash explicitly
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-"code completeion for vim, see (http://valloric.github.io/YouCompleteMe/#user-guide)
-"
-" not to self: YCM instructions were specifically to use Vundle, so I did.  They
-" insisted that they be followed exactly for things to work correctly.  This
-" might look insane and it probably isn't too complicated to just use Plug with
-" a little configuration to do this, but I was too lazy to figure that out, and
-" this doesn't seem to cause any problems.
-"
-Plugin 'Valloric/YouCompleteMe'
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
+" uses same kinds of commands as vundle but it's PlugInstall instead of
+" PluginInstall, etc.
+" --- copypaste from vundle (but use Plug instead of Plugin...):
 " Brief help
 " :PluginList       - lists configured plugins
 " :PluginInstall    - installs plugins; append `!` to update or just
@@ -398,20 +374,15 @@ filetype plugin indent on    " required
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to
 " auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-" }}}
+" --- end copypaste
 
-" VIM-PLUG CONFIG (https://github.com/junegunn/vim-plug)
-" {{{
-" uses same kinds of commands as vundle but it's PlugInstall instead of
-" PluginInstall, etc.
-" why the hell do I have 2 plugin managers?  because these were already all set
-" up using plug, and I only wanted to use vundle for YCM because it seemed
-" really picky about that.  It hasn't caused any conflicts, so i've just been
-" too lazy to do whatever is neccessary to consolidate them all into 1 manager.
-call plug#begin('~/.vim/plugged')
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/bundle')
 
 Plug 'morhetz/gruvbox'
 Plug 'vim-airline/vim-airline'
@@ -427,6 +398,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdcommenter'
 Plug 'chrisbra/csv.vim'
+Plug 'Valloric/YouCompleteMe'
+Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 
 call plug#end()
 " }}}
@@ -469,6 +442,8 @@ let g:airline#extensions#ycm#warning_symbol = 'E:'
 " note to self: to update settings, run:
 " :PromptLine
 " :PromptlineSnapshot! ~/dotfiles/.promptline.sh
+" (or whatever path you want the config file to live for given system)
+" ... I mainly use this on my mac, I have different prompt prefs for linux
 let g:promptline_preset = {
         \'a': [ promptline#slices#host({ 'only_if_ssh': 1  }), promptline#slices#user()  ],
         \'b': [ promptline#slices#cwd({ 'dir_limit': 4  })  ],
@@ -484,6 +459,9 @@ let g:promptline_theme = 'airline_visual'
 " note to self: to update settings, run:
 " :TmuxLine
 " :TmuxlineSnapshot! ~/dotfiles/.tmuxline.conf
+" (or whatever path you want the config file to live for given system)
+" ... to use another theme, use Tmuxline airline (which will set the theme to
+" the currently loaded airline theme... i.e.> :AirlineTheme [theme])
 let g:airline#extensions#tmuxline#enabled=0
 let g:tmuxline_preset = {
         \ 'a': ['#F:#I','#W'],
@@ -497,13 +475,14 @@ let g:tmuxline_theme = 'airline_visual'
 
 " YOUCOMPLETEME CONFIG
 " {{{
-let g:ycm_global_ycm_extra_conf = "~/dotfiles/.ycm_extra_conf.py"
+let g:ycm_global_ycm_extra_conf = "~/vimrc/.ycm_extra_conf.py"
 let g:ycm_always_populate_location_list = 0
 let g:ycm_seed_identifiers_with_syntax = 0
 " }}}
 
 " MERLIN CONFIG
 " {{{
+" ...currently disabled. leaving this here for reference in case I want to use it again in the future.
 "let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
 "execute "set rtp+=" . g:opamshare . "/merlin/vim"
 " }}}
